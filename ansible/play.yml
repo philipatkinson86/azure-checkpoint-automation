@@ -1,0 +1,135 @@
+- hosts: 52.156.190.30
+  vars_files:
+    - vars.yml
+  connection: httpapi
+
+  tasks:
+
+    - name: Create Dynamic object 1
+      cp_mgmt_dynamic_object:
+        name: LocalGatewayExternal
+        state: present
+
+    - name: Create Dynamic object 2
+      cp_mgmt_dynamic_object:
+        name: LocalGatewayInternal
+        state: present
+
+    - name: Create Host 1
+      cp_mgmt_host:
+        name: webi-load-balancer
+        ip_address: 10.99.1.11
+        state: present
+
+    - name: Create Host 2
+      cp_mgmt_host:
+        name: web1
+        ip_address: 10.99.11.10
+        nat_settings:
+          auto_rule: yes
+          hide_behind: gateway
+        state: present
+
+    - name: Create Host 3
+      cp_mgmt_host:
+        name: web2
+        ip_address: 10.99.12.10
+        nat_settings:
+          auto_rule: yes
+          hide_behind: gateway
+        state: present
+
+    - name: Create Service 1
+      cp_mgmt_service_tcp:
+        name: http-8090
+        port: "8090"
+        protocol: HTTP
+        state: present
+
+    - name: Add Acces Rule 1
+      cp_mgmt_access_rule:
+        layer: Network
+        name: Allow HTTP
+        position: "1"
+        source: Any
+        destination: LocalGatewayExternal 
+        service:
+        - http-8090
+        action: Accept
+        track:
+          type: Log
+        state: present
+
+    - name: Add Acces Rule 2
+      cp_mgmt_access_rule:
+        layer: Network
+        name: Allow SSH
+        position: "2"
+        source: Any
+        destination: LocalGatewayExternal
+        service:
+        - ssh
+        action: Accept
+        track:
+          type: Log
+        state: present
+
+    - name: Add Acces Rule 3
+      cp_mgmt_access_rule:
+        layer: Network
+        name: Allow Outbound Internet
+        position: "3"
+        source: 
+        - web1
+        - web2
+        destination: Any
+        service:
+        - http
+        - https
+        - dns
+        action: Accept
+        track:
+          type: Log
+        state: present
+
+    - name: Add Acces Rule 4
+      cp_mgmt_access_rule:
+        layer: Network
+        name: Drop All
+        position: "4"
+        source: Any
+        destination: Any
+        service: Any
+        action: Drop
+        track:
+          type: Log
+        state: present
+
+    - name: Delete Default Cleanup rule
+      cp_mgmt_access_rule:
+        layer: Network
+        name: Cleanup rule
+        state: absent
+
+    - name: Publish Handler
+      cp_mgmt_publish:
+
+    - name: Add NAT rule via run-script module / Mgmt_CLI
+      cp_mgmt_run_script:
+        script: "mgmt_cli add nat-rule package \"standard\" position \"top\" original-source \"All_Internet\" original-destination \"LocalGatewayExternal\" original-service \"http-8090\" translated-source \"LocalGatewayInternal\" method \"Hide\" translated-destination \"webi-load-balancer\" translated-service \"http\" --format json --root true"
+        script_name: "Add NAT rule 1"
+        targets:
+        - r80dot40mgmt
+        wait_for_task: no
+
+    - name: Publish Handler
+      cp_mgmt_publish:
+
+    - name: Enable CME via run-script module / Mgmt_CLI
+      cp_mgmt_run_script:
+        script: "autoupdatercli enable CME"
+        script_name: "enable CME"
+        targets:
+        - r80dot40mgmt
+        wait_for_task: no
+

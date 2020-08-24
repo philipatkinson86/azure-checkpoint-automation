@@ -11,7 +11,7 @@ resource "azurerm_virtual_machine" "chkpmgmt" {
     resource_group_name   = azurerm_resource_group.rg.name
     network_interface_ids = [azurerm_network_interface.mgmtexternal.id]
     primary_network_interface_id = azurerm_network_interface.mgmtexternal.id
-    vm_size               = "Standard_D4s_v3"
+    vm_size               = "Standard_D2_v3"
     
     depends_on = [azurerm_marketplace_agreement.checkpoint]
 

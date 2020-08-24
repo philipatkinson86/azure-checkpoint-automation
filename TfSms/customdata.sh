@@ -18,3 +18,6 @@ echo "Add user api_user with password vpn123"
 mgmt_cli -r true add administrator name "api_user" password "VPN123vpn123!" must-change-password false authentication-method "INTERNAL_PASSWORD" permissions-profile "Super User" --domain 'System Data'
 echo "Restarting API Server"
 api restart
+sleep 5
+autoprov_cfg -f init Azure -mn r80dot40mgmt -tn Azure_VisualStudio_R80.40 -otp vpn12345 -ver R80.40 -po Standard -cn Azure -sb "9a484f3e-b9a6-44d6-908d-de2cd00e349e" -at 2188ddff-630a-4b97-8202-14916ae518af -aci "9efa893f-23ef-40af-b282-ec7e6208b05b" -acs "Xc2VyhZ/y1Cnm4TojPqkV8kb2L3Vpy34tqpZIHSds/8="
+autoprov_cfg -f set template -tn Azure_VisualStudio_R80.40 -av -ab -ips

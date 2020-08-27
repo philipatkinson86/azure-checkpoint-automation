@@ -1,14 +1,14 @@
 #! /bin/sh
 echo "`date -u`\e[1;33m [SECUREME SCRIPT] Building Check Point Mgmt server in Azure...\e[0m"
 cd TfSms
-# terraform init -input=false
-# terraform apply -auto-approve
-#echo "<tf apply>"
+terraform init -input=false
+terraform apply -auto-approve
+echo "<tf apply>"
 my_ip=`cat terraform.tfstate | grep value | grep -o ': ".*"' | tr -d ' :"'`
 echo "`date -u`\e[1;33m [SECUREME SCRIPT] Waiting for build to finish, this should take around 20mins...\e[0m"
 echo "`date -u`\e[1;33m [SECUREME SCRIPT] If you want to see progress, SSH to $my_ip (admin/VPN123vpn123!) and tail -f /var/log/ftw_install.log\e[0m"
-# sleep 1200
-sleep 1
+echo "`date -u`\e[1;33m [SECUREME SCRIPT] after FTW run \$MDS_FWDIR/scripts/cpm_status.sh to see if the SMS is running \e[0m"
+sleep 1200
 echo "`date -u`\e[1;33m [SECUREME SCRIPT] Mgmt build should be finished, sync-ing latest public IP to Ansiblie config files...\e[0m"
 file1=../ansible/vars.yml
 file2=../ansible/play.yml

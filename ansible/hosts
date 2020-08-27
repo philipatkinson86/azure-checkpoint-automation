@@ -5,4 +5,4 @@ ansible_user=admin
 ansible_password=VPN123vpn123!
 ansible_network_os=check_point.mgmt.checkpoint
 [checkpointr8040]
-13.75.136.92
+13.72.253.42

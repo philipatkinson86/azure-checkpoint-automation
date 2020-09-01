@@ -3,6 +3,6 @@ ansible_httpapi_use_ssl=True
 ansible_httpapi_validate_certs=False
 ansible_user=admin
 ansible_password=VPN123vpn123!
-ansible_network_os=check_point.mgmt.checkpoint
+ansible_network_os=checkpoint
 [checkpointr8040]
-13.72.253.42
+52.156.185.18

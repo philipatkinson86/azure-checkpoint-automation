@@ -1,4 +1,4 @@
-- hosts: 13.72.253.42
+- hosts: 52.156.185.18
   vars_files:
     - vars.yml
   connection: httpapi

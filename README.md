@@ -25,4 +25,4 @@ Here is a summary of the step-by-step process labelled on the picture:
 ## Further Info
 For a more detailed analysis of the code, processes and pre-requisites to build this environment, take a look at my article on "Check Mates", our Check Point community hub here:
 
-insert hyperlink
+https://community.checkpoint.com/t5/API-CLI-Discussion-and-Samples/Automation-amp-Orchestration-with-Check-Point-IaaS-Azure/m-p/95914#M5147
